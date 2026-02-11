@@ -1,0 +1,22 @@
+### Local variables
+@issuer = http://127.0.0.1:8180/realms/local-dev
+@tokenUrl = {{issuer}}/protocol/openid-connect/token
+@apiBaseUrl = http://127.0.0.1:8080
+@clientId = backend-caller
+@clientSecret = backend-caller-secret
+
+### 1) Request access token (OIDC client_credentials)
+POST {{tokenUrl}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id={{clientId}}&client_secret={{clientSecret}}
+
+> {%
+  client.global.set("access_token", response.body.access_token);
+%}
+
+### 2) Call secured hello API with bearer token
+GET {{apiBaseUrl}}/hello/world
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
