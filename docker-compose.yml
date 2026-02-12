@@ -1,4 +1,15 @@
 services:
+  api:
+    image: simple-api:latest
+    container_name: simple-api-api
+    environment:
+      OAUTH2_ISSUER_URI: http://keycloak:8080/realms/local-dev
+      OPENAPI_OAUTH_TOKEN_URL: http://127.0.0.1:8180/realms/local-dev/protocol/openid-connect/token
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - keycloak
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.0
     container_name: simple-api-keycloak
@@ -8,6 +19,7 @@ services:
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: http://keycloak:8080
     ports:
       - "127.0.0.1:8180:8080"
     volumes:

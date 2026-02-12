@@ -3,7 +3,7 @@
 ## 1. Start Keycloak
 
 ```bash
-docker compose up -d keycloak
+podman compose -f docker-compose.yml up -d keycloak
 ```
 
 Keycloak will be available at `http://localhost:8180`.
@@ -58,7 +58,7 @@ curl -i -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello/world
 ## 5. Stop local IdP
 
 ```bash
-docker compose down
+podman compose -f docker-compose.yml down
 ```
 
 ## Production wiring

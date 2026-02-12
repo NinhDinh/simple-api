@@ -16,7 +16,7 @@ Planned next step:
 - Spring Boot 4
 - Spring Security OAuth2 Resource Server (JWT)
 - Springdoc OpenAPI + Swagger UI
-- Keycloak (Docker/Podman compose)
+- Keycloak (Podman Compose)
 
 ## Project Structure
 
@@ -32,7 +32,7 @@ Planned next step:
 
 - Java (JDK 17+)
 - Maven (`mvn`)
-- Podman or Docker with compose support
+- Podman with compose support
 
 ## Local Setup
 
@@ -99,6 +99,23 @@ Compile app:
 ```bash
 mvn -DskipTests compile
 ```
+
+Build container image:
+
+```bash
+mvn -DskipTests clean package
+podman build -t simple-api:latest .
+```
+
+Run API + Keycloak together:
+
+```bash
+podman compose -f docker-compose.yml up -d keycloak api
+```
+
+Note:
+- API validates JWT issuer against the internal service URL (`http://keycloak:8080/...`).
+- Swagger UI token request uses the host URL (`http://127.0.0.1:8180/...`) so browser authorization works.
 
 ## Notes
 

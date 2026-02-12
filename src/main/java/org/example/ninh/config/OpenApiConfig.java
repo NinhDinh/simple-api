@@ -15,12 +15,17 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    OpenAPI openAPI(@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuerUri) {
+    OpenAPI openAPI(
+            @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuerUri,
+            @Value("${openapi.oauth.token-url:}") String overrideTokenUrl
+    ) {
         String normalizedIssuer = issuerUri.endsWith("/")
                 ? issuerUri.substring(0, issuerUri.length() - 1)
                 : issuerUri;
 
-        String tokenUrl = normalizedIssuer + "/protocol/openid-connect/token";
+        String tokenUrl = (overrideTokenUrl == null || overrideTokenUrl.isBlank())
+                ? normalizedIssuer + "/protocol/openid-connect/token"
+                : overrideTokenUrl;
 
         SecurityScheme oauth2ClientCredentials = new SecurityScheme()
                 .type(SecurityScheme.Type.OAUTH2)
